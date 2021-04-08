@@ -42,6 +42,8 @@ const inputzim = {
   background: "#ddd",
   border: "#89f",
   padding: "10px 20px",
+  fontSize: 18,
+  fontWeight: 500,
 };
 const inputzimButton = {
   background: "#89f",
