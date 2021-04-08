@@ -185,9 +185,17 @@ const IndexPage = () => {
           className='validate'
           target='_blank'
           onSubmit={e => handleSubmit(e, email)}
+          netlify-honeypot='bot-field'
+          data-netlify='true'
           noValidate
         >
+          <p className='hidden'>
+            <label>
+              Don’t fill this out if you’re human: <input name='bot-field' />
+            </label>
+          </p>
           <br />
+
           <input
             type='email'
             name='EMAIL'
