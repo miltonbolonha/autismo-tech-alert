@@ -111,18 +111,19 @@ const IndexPage = () => {
   const [success, setSuccess] = useState("");
   const handleMcRes = (msgReceived, resReceived) => {
     setMcRes(resReceived);
-    console.log(msgReceived);
-    console.log(resReceived);
-    console.log("mcRes: ");
-    console.log(mcRes);
-    handleMsg(msgReceived);
-    // if (resReceived === "success") {
+    handleMsg(msgReceived, resReceived);
     handleSuccess(resReceived);
-    // }
   };
 
-  const handleMsg = msgNow => {
-    setMsg(msgNow);
+  const handleMsg = (msgNow, resReceived) => {
+    let msgNull = null;
+    if (resReceived === "error") {
+      msgNull = "E-mail inválido ou já cadastrado.";
+    }
+    if (resReceived === "success") {
+      msgNull = "Lembrete definido. Até logo!";
+    }
+    setMsg(msgNull);
   };
   const handleSuccess = successNow => {
     setSuccess(successNow);
@@ -137,10 +138,6 @@ const IndexPage = () => {
     await addToMailchimp(email).then(({ msg, result }) => {
       handleMcRes(msg, result);
     });
-    // console.log(result.url);
-    // console.log(result.data);
-    console.log("email");
-    console.log(email);
   };
 
   return (
@@ -195,7 +192,7 @@ const IndexPage = () => {
             type='email'
             name='EMAIL'
             id='mce-EMAIL'
-            placeholder='email@email.com (insira seu e-mail)'
+            placeholder='seu@email.com (avise-me por e-mail)'
             required
             style={inputzim}
             size='28'
@@ -208,7 +205,6 @@ const IndexPage = () => {
           </label>
           <br />
           <br />
-          {/* <input type='button' value='Vai q vai !' style={inputzimButton} /> */}
           <button
             type='submit'
             style={inputzimButton}
