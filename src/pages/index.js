@@ -86,12 +86,14 @@ const smallzim = {
   fontStyle: "italic",
 };
 
-const nemmmmm = {
+const successHTMLstyle = {
   color: "green",
   fontWeight: 900,
+  marginBottom: 0,
 };
-const vishhh = {
+const errorHTMLstyle = {
   color: "red",
+  marginBottom: 0,
   fontWeight: 900,
 };
 
@@ -173,7 +175,9 @@ const IndexPage = () => {
         </li>
       </ul>
       {msg ? (
-        <p style={success === "success" ? nemmmmm : vishhh}>{msg}</p>
+        <p style={success === "success" ? successHTMLstyle : errorHTMLstyle}>
+          {msg}
+        </p>
       ) : null}
       {success !== "success" ? (
         <form
