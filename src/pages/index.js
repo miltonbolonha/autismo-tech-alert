@@ -41,8 +41,9 @@ const listItemStyles = {
 const inputzim = {
   background: "#ddd",
   border: "#89f",
-  padding: "15px 30px",
-  fontSize: 18,
+  padding: "15px 15px",
+  maxWidth: 250,
+  fontSize: 14,
   fontWeight: 500,
   borderRadius: 5,
   outline: 0,
