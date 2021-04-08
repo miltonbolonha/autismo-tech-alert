@@ -190,7 +190,7 @@ const IndexPage = () => {
           onSubmit={e => handleSubmit(e, email, honey)}
           noValidate
         >
-          <p className='hidden2'>
+          <p className='hidden'>
             <label>
               Don’t fill this out if you’re human:{" "}
               <input
