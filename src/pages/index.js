@@ -45,6 +45,7 @@ const inputzim = {
   fontSize: 18,
   fontWeight: 500,
   borderRadius: 5,
+  outline: 0,
   marginBottom: 5,
 };
 const inputzimButton = {
@@ -106,6 +107,7 @@ const docLink = {
 // markup OK
 const IndexPage = () => {
   const [email, setEmail] = useState("");
+  const [honey, setHoney] = useState("");
   const [mcRes, setMcRes] = useState("");
   const [msg, setMsg] = useState("");
   const [success, setSuccess] = useState("");
@@ -114,7 +116,6 @@ const IndexPage = () => {
     handleMsg(msgReceived, resReceived);
     handleSuccess(resReceived);
   };
-
   const handleMsg = (msgNow, resReceived) => {
     let msgNull = null;
     if (resReceived === "error") {
@@ -132,17 +133,19 @@ const IndexPage = () => {
   const handleEmailChange = emailTyping => {
     setEmail(emailTyping);
   };
-
-  const handleSubmit = async (e, email) => {
+  const handleHoneypotChange = honeyTyping => {
+    setHoney(honeyTyping);
+  };
+  const handleSubmit = async (e, email, honey) => {
     e.preventDefault();
-    await addToMailchimp(email).then(({ msg, result }) => {
-      handleMcRes(msg, result);
-    });
+    honey ||
+      (await addToMailchimp(email).then(({ msg, result }) => {
+        handleMcRes(msg, result);
+      }));
   };
 
   return (
     <main style={pageStyles}>
-      {/* <title>Home Page</title> */}
       <small>3ª edição</small>
       <h1 style={headingStyles}>
         Autismo Tech
@@ -184,10 +187,21 @@ const IndexPage = () => {
           name='mc-embedded-subscribe-form'
           className='validate'
           target='_blank'
-          onSubmit={e => handleSubmit(e, email)}
+          onSubmit={e => handleSubmit(e, email, honey)}
           noValidate
         >
+          <p className='hidden'>
+            <label>
+              Don’t fill this out if you’re human:{" "}
+              <input
+                name='bot-field'
+                onChange={e => handleHoneypotChange(e.target.value)}
+                value={honey}
+              />
+            </label>
+          </p>
           <br />
+
           <input
             type='email'
             name='EMAIL'
@@ -205,14 +219,19 @@ const IndexPage = () => {
           </label>
           <br />
           <br />
-          <button
-            type='submit'
-            style={inputzimButton}
-            name='subscribe'
-            id='mc-embedded-subscribe'
-          >
-            Alerta-me!
-          </button>
+          {honey || email === "" ? null : (
+            <>
+              <button
+                type='submit'
+                style={inputzimButton}
+                name='subscribe'
+                id='mc-embedded-subscribe'
+                disabled={email ? false : true}
+              >
+                Alerta-me!
+              </button>
+            </>
+          )}
         </form>
       ) : (
         <>
