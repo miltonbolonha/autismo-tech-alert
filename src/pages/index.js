@@ -13,7 +13,7 @@ const pageStyles = {
 const headingStyles = {
   marginTop: 0,
   marginBottom: 25,
-  maxWidth: 320,
+  textAlign: "center",
 };
 const headingAccentStyles = {
   color: "#89f",
@@ -41,23 +41,28 @@ const listItemStyles = {
 const inputzim = {
   background: "#ddd",
   border: "#89f",
-  padding: "10px 20px",
+  padding: "15px 30px",
   fontSize: 18,
   fontWeight: 500,
+  borderRadius: 5,
+  marginBottom: 5,
 };
 const inputzimButton = {
   background: "#89f",
   border: 0,
+  borderRadius: 5,
   color: "#fff",
   cursor: "pointer",
-  padding: "10px 20px",
+  padding: "15px 30px",
+  boxShadow: "5px 5px 0 0 #dee3ff",
+  outline: 0,
   fontWeight: 900,
   fontSize: 18,
 };
 const linkStyle = {
   color: "#89f",
   fontWeight: "bold",
-  fontSize: 16,
+  fontSize: 20,
   verticalAlign: "5%",
 };
 
@@ -71,11 +76,27 @@ const labelStyle = {
 const docLinkStyle = {
   ...linkStyle,
   listStyleType: "none",
-  marginBottom: 24,
+  marginBottom: 10,
+  fontSize: 15,
+};
+
+const smallzim = {
+  ...labelStyle,
+  // fontSize: 11,
+  fontStyle: "italic",
+};
+
+const nemmmmm = {
+  color: "green",
+  fontWeight: 900,
+};
+const vishhh = {
+  color: "red",
+  fontWeight: 900,
 };
 
 const docLink = {
-  text: "Link do evento no YouTube",
+  text: "Definir Lembrete no YouTube: ▶️",
   url: "https://www.youtube.com/watch?v=0pHiOO_6qiU",
   color: "#89f",
 };
@@ -83,26 +104,52 @@ const docLink = {
 // markup OK
 const IndexPage = () => {
   const [email, setEmail] = useState("");
+  const [mcRes, setMcRes] = useState("");
+  const [msg, setMsg] = useState("");
+  const [success, setSuccess] = useState("");
+  const handleMcRes = (msgReceived, resReceived) => {
+    setMcRes(resReceived);
+    console.log(msgReceived);
+    console.log(resReceived);
+    console.log("mcRes: ");
+    console.log(mcRes);
+    handleMsg(msgReceived);
+    // if (resReceived === "success") {
+    handleSuccess(resReceived);
+    // }
+  };
+
+  const handleMsg = msgNow => {
+    setMsg(msgNow);
+  };
+  const handleSuccess = successNow => {
+    setSuccess(successNow);
+  };
+
   const handleEmailChange = emailTyping => {
     setEmail(emailTyping);
   };
 
-  async function handleSubmit(e, email) {
+  const handleSubmit = async (e, email) => {
     e.preventDefault();
-    await addToMailchimp(email).then(data => {
-      console.log(data);
+    await addToMailchimp(email).then(({ msg, result }) => {
+      handleMcRes(msg, result);
     });
-    console.log(e);
+    // console.log(result.url);
+    // console.log(result.data);
+    console.log("email");
     console.log(email);
-  }
+  };
+
   return (
     <main style={pageStyles}>
-      <title>Home Page</title>
+      {/* <title>Home Page</title> */}
       <small>3ª edição</small>
       <h1 style={headingStyles}>
         Autismo Tech
         <br />
         <span style={headingAccentStyles}>— 9 de abril, 18:30! </span>
+        <br />
         <span role='img' aria-label='Party popper emojis'>
           🎉🎉🎉
         </span>
@@ -125,45 +172,55 @@ const IndexPage = () => {
           </a>
         </li>
       </ul>
-      <form
-        style={listItemStyles}
-        method='post'
-        id='mc-embedded-subscribe-form'
-        name='mc-embedded-subscribe-form'
-        class='validate'
-        target='_blank'
-        onSubmit={e => handleSubmit(e, email)}
-        novalidate
-      >
-        <br />
-        <input
-          type='email'
-          name='EMAIL'
-          id='mce-EMAIL'
-          placeholder='email@email.com (insira seu e-mail)'
-          required
-          style={inputzim}
-          size='28'
-          onChange={e => handleEmailChange(e.target.value)}
-          value={email}
-        />
-        <br />
-        <label htmlFor='mce-EMAIL'>
-          <span style={labelStyle}>Não enviamos spam :)</span>
-        </label>
-        <br />
-        <br />
-        {/* <input type='button' value='Vai q vai !' style={inputzimButton} /> */}
-        <button
-          type='submit'
-          style={inputzimButton}
-          name='subscribe'
-          id='mc-embedded-subscribe'
+      {msg ? (
+        <p style={success === "success" ? nemmmmm : vishhh}>{msg}</p>
+      ) : null}
+      {success !== "success" ? (
+        <form
+          style={listItemStyles}
+          method='post'
+          id='mc-embedded-subscribe-form'
+          name='mc-embedded-subscribe-form'
+          className='validate'
+          target='_blank'
+          onSubmit={e => handleSubmit(e, email)}
+          noValidate
         >
-          Alerta-me!
-        </button>
-      </form>
-      <StaticImage src='../images/mailchimp.webp' alt='Mailchimp' width='24 ' />
+          <br />
+          <input
+            type='email'
+            name='EMAIL'
+            id='mce-EMAIL'
+            placeholder='email@email.com (insira seu e-mail)'
+            required
+            style={inputzim}
+            size='28'
+            onChange={e => handleEmailChange(e.target.value)}
+            value={email}
+          />
+          <br />
+          <label htmlFor='mce-EMAIL'>
+            <span style={smallzim}>Não enviamos spam :)</span>
+          </label>
+          <br />
+          <br />
+          {/* <input type='button' value='Vai q vai !' style={inputzimButton} /> */}
+          <button
+            type='submit'
+            style={inputzimButton}
+            name='subscribe'
+            id='mc-embedded-subscribe'
+          >
+            Alerta-me!
+          </button>
+        </form>
+      ) : (
+        <>
+          <br />
+        </>
+      )}
+
+      <StaticImage src='../images/mailchimp.webp' alt='Mailchimp' width={24} />
       <img
         alt='Gatsby G Logo'
         src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
