@@ -203,6 +203,7 @@ const IndexPage = () => {
             placeholder='seu@email.com (avise-me por e-mail)'
             required
             style={inputzim}
+            data-netlify='true'
             size='28'
             onChange={e => handleEmailChange(e.target.value)}
             value={email}
